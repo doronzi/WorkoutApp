@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="300dp"
+    tools:context=".new_workout_activity">
+
+    <TextView
+        android:id="@+id/workoutName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="63dp"
+        android:layout_marginTop="50dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="67dp"
+        android:layout_marginBottom="38dp"
+        android:text="TextView" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/exList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="71dp"
+        android:layout_marginEnd="-57dp"
+        android:layout_toStartOf="@+id/dateTextView"
+        android:minWidth="300dp" />
+
+    <Button
+        android:id="@+id/addEx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="187dp"
+        android:onClick="addEx"
+        android:text="Add Execise" />
+
+    <Button
+        android:id="@+id/newSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/addEx"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="98dp"
+        android:onClick="newSet"
+        android:text="Button"
+        android:enabled="false"/>
+
+    <Button
+        android:id="@+id/endSet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/addEx"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="2dp"
+        android:onClick="endSet"
+        android:text="Button"
+        android:enabled="false"/>
+
+    <Chronometer
+        android:id="@+id/simpleChronometerGlobalTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <Chronometer
+        android:id="@+id/simpleChronometerSetTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/simpleChronometerRestTime"/>
+    <Chronometer
+        android:id="@+id/simpleChronometerRestTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/simpleChronometerGlobalTime"/>
+
+</RelativeLayout>

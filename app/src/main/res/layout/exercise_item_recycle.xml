@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical">
+    <View
+        android:background="#D3D3D3"
+        android:id="@+id/item_divider"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+    
+    <TextView
+        android:id="@+id/item_title"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/sub_item"
+        android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
+        <TextView
+            android:id="@+id/exInfo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</LinearLayout>
