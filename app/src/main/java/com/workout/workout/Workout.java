@@ -10,13 +10,14 @@ public class Workout {
     private String woName;
     private List<Exercise> exs;
     private String date;
+    private String id;
 
     public Workout(String name){
         exs = new ArrayList<Exercise>();
         woName = name;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date d = new Date();
         date = dateFormat.format(new Date());
+        id = woName + date;
     }
 
     public String getWoName() {
@@ -34,5 +35,9 @@ public class Workout {
     public void addEx(String exName, int number_of_sets){
         Exercise ex = new Exercise(number_of_sets, exName);
         exs.add(ex);
+    }
+
+    public void setExs(List<Exercise> exs) {
+        this.exs = new ArrayList<Exercise>(exs);
     }
 }
