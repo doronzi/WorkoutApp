@@ -18,6 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Chronometer;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,10 +35,15 @@ public class new_workout_activity extends AppCompatActivity {
     Chronometer setChronmtr, globalChronmtr, restChronmtr;
     private double restTime = 0;
     int currentEx = 0;
+    DatabaseReference myRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_workout_activity);
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+        myRef.setValue("Workouts");
 
         final TextView workoutNameTxtView = (TextView)findViewById(R.id.workoutName);
         final TextView dateTxtView = (TextView)findViewById(R.id.dateTextView);
@@ -129,10 +137,10 @@ public class new_workout_activity extends AppCompatActivity {
     }
     public void newSet(View view) {
         long systemCurrTime = SystemClock.elapsedRealtime();
-        if (restTime != NO_REST_BEFORE){
-            restTime =  (systemCurrTime - restChronmtr.getBase()) /1000;
-            restChronmtr.stop();
-        }
+
+        restTime =  (systemCurrTime - restChronmtr.getBase()) /1000;
+        restChronmtr.stop();
+
 
         systemCurrTime = SystemClock.elapsedRealtime();
         setChronmtr.setBase(systemCurrTime);
@@ -145,7 +153,7 @@ public class new_workout_activity extends AppCompatActivity {
 
 
         long elapsedMillis = systemCurrTime - setChronmtr.getBase();
-        double elapsedSetSecs = elapsedMillis / 1000;
+        final double setTime = elapsedMillis / 1000;
         setChronmtr.stop();
 
         systemCurrTime = SystemClock.elapsedRealtime();
@@ -177,8 +185,6 @@ public class new_workout_activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Exercise ex = exList.get(currentEx);
-                long systemCurrTime = SystemClock.elapsedRealtime();
-                double setTime = (systemCurrTime - setChronmtr.getBase()) /1000;
                 ex.setSet(Integer.parseInt(inputReps.getText().toString()),
                         Float.parseFloat(inputWeight.getText().toString()),setTime,restTime);
                 ex.increntCounter();
@@ -191,6 +197,7 @@ public class new_workout_activity extends AppCompatActivity {
                 else
                     addSetButton.setEnabled(true);
                 endSetButton.setEnabled(false);
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -206,5 +213,8 @@ public class new_workout_activity extends AppCompatActivity {
 
     public void finishWorkout(View view) {
         newWorkout.setExs(exList);
+
+        myRef.child("Workouts").child(newWorkout.getId()).setValue(newWorkout);
+
     }
 }

@@ -33,11 +33,16 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
             boolean expanded = ex.isExpanded();
             // Set the visibility based on state
             subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+            if (ex.getSetCounter() > 0 &&  !ex.getSets().get(ex.getSetCounter() - 1).isInitilized()) {
+                TextView tempTV = new TextView (context);
+                tempTV.setText(ex.getSets().get(ex.getSetCounter() - 1).toString());
+                ex.getSets().get(ex.getSetCounter() - 1).setInitilized(true);
+                subItem.addView(tempTV);
 
-
+            }
 
             title.setText(ex.getExName());
-            exInfo.setText(ex.toString());
+            //exInfo.setText(ex.toString());
 //            TextView[] setsTV = new TextView[ex.getSets().length];
 //            Log.i(TAG, "title set " + ex.getExName());
 //            int i = 0;

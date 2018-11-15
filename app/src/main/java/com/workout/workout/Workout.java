@@ -12,12 +12,15 @@ public class Workout {
     private String date;
     private String id;
 
+    public Workout(){}
+
     public Workout(String name){
         exs = new ArrayList<Exercise>();
         woName = name;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         date = dateFormat.format(new Date());
-        id = woName + date;
+        DateFormat dateIDFormat = new SimpleDateFormat("ddMMyyyy");
+        id = woName + dateIDFormat.format(new Date());
     }
 
     public String getWoName() {
@@ -36,6 +39,11 @@ public class Workout {
         Exercise ex = new Exercise(number_of_sets, exName);
         exs.add(ex);
     }
+
+    public String getId() {
+        return id;
+    }
+
 
     public void setExs(List<Exercise> exs) {
         this.exs = new ArrayList<Exercise>(exs);
