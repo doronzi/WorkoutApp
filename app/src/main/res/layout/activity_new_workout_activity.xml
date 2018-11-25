@@ -19,12 +19,13 @@
         android:layout_height="wrap_content"
         android:text="TextView" />
 
-    <android.support.v7.widget.RecyclerView
+    <LinearLayout
         android:id="@+id/exList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:minWidth="300dp" />
+        android:orientation="horizontal"></LinearLayout>
+
+
 
     <Button
         android:id="@+id/addEx"

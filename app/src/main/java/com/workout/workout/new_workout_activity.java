@@ -2,6 +2,7 @@ package com.workout.workout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Chronometer;
 
@@ -37,6 +39,10 @@ public class new_workout_activity extends AppCompatActivity {
     private double restTime = 0;
     int currentEx = 0;
     DatabaseReference myRef;
+    private List<ListView> listViews = new ArrayList<>();
+    private List<SetsAdapter> listAdapters = new ArrayList<>();
+    private LinearLayout listViewLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +61,8 @@ public class new_workout_activity extends AppCompatActivity {
         addSetButton = (Button)findViewById(R.id.newSet);
         endSetButton = (Button)findViewById(R.id.endSet);
         finishWorkoutButton = (Button)findViewById(R.id.finishWorkout);
+        listViewLayout = (LinearLayout)findViewById(R.id.exList);
+
 
         globalChronmtr.start();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -84,12 +92,12 @@ public class new_workout_activity extends AppCompatActivity {
 
         builder.show();
 
-        exRecyclerView = (RecyclerView) findViewById(R.id.exList);
-        exAdapter = new ExerciseAdapter(exList);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        exRecyclerView.setLayoutManager(mLayoutManager);
-        exRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        exRecyclerView.setAdapter(exAdapter);
+        //exRecyclerView = (RecyclerView) findViewById(R.id.exList);
+//        exAdapter = new ExerciseAdapter(exList);
+//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+//        exRecyclerView.setLayoutManager(mLayoutManager);
+//        exRecyclerView.setItemAnimator(new DefaultItemAnimator());
+//        exRecyclerView.setAdapter(exAdapter);
 
 
     }
@@ -120,11 +128,23 @@ public class new_workout_activity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                exList.add(new Exercise(Integer.parseInt(inputNumOfSets.getText().toString()),
-                        inputName.getText().toString()));
-                        exAdapter.notifyDataSetChanged();
+                Exercise ex = new Exercise(Integer.parseInt(inputNumOfSets.getText().toString()),
+                        inputName.getText().toString());
+                exList.add(ex);
+//                        exAdapter.notifyDataSetChanged();
                         addSetButton.setEnabled(true);
                         addExButton.setEnabled(false);
+                        ListView tempListView = new ListView(getBaseContext());
+                        TextView listViewTitleTxt = new TextView(getBaseContext());
+                        listViewTitleTxt.setText(inputName.getText().toString());
+                        listViewTitleTxt.setTextColor(Color.BLACK);
+                        tempListView.addHeaderView(listViewTitleTxt);
+                        SetsAdapter tempAdapter = new SetsAdapter(ex.getSets(),getBaseContext());
+                        tempListView.setAdapter(tempAdapter);
+                        listAdapters.add(tempAdapter);
+                        listViews.add(tempListView);
+                        listViewLayout.addView(tempListView);
+
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -189,8 +209,9 @@ public class new_workout_activity extends AppCompatActivity {
                 ex.setSet(Integer.parseInt(inputReps.getText().toString()),
                         Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
                 ex.increntCounter();
-                exAdapter.notifyDataSetChanged();
-
+                listAdapters.get(currentEx).notifyDataSetChanged();
+//                exAdapter.notifyDataSetChanged();
+//
                 if (ex.isEnded()) {
                     addExButton.setEnabled(true);
                     finishWorkoutButton.setEnabled(true);

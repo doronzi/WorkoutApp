@@ -46,7 +46,7 @@ public class SetsAdapter extends ArrayAdapter<WorkoutSet> {
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.set_list_item, parent);
+            convertView = inflater.inflate(R.layout.set_list_item, parent, false);
             viewHolder.txtReps = (TextView) convertView.findViewById(R.id.repsTxt);
             viewHolder.txtWeight = (TextView) convertView.findViewById(R.id.weightTxt);
             viewHolder.txtRest = (TextView) convertView.findViewById(R.id.restTime);
