@@ -2,6 +2,9 @@ package com.workout.workout;
 
 import java.util.ArrayList;
 
+/*
+A class which representing an Exercise
+ */
 public class Exercise {
     private ArrayList<WorkoutSet> sets;
     private String exName;
@@ -9,19 +12,29 @@ public class Exercise {
     private int setCounter;
     private int numOfSets;
 
+    /**
+     *
+     * @param numOfSets the number of sets the exercise contains
+     * @param name the exercise name
+     */
     public Exercise(int numOfSets, String name){
-        //sets = new WorkoutSet[numOfSets];
-//        for (int i =0; i < numOfSets; i++)
-//            sets[i] = new WorkoutSet();
         sets = new ArrayList<WorkoutSet>();
         exName = name;
         this.numOfSets = numOfSets;
         setCounter = 0;
     }
+    public Exercise(){
+        setCounter = 0;
+    }
 
+    /**
+     * Exercise name getter
+     * @return Exercise name
+     */
     public String getExName() {
         return exName;
     }
+
     public int getNumberOfSets(){
         return sets.size();
     }
@@ -70,7 +83,7 @@ public class Exercise {
     }
 
     public boolean isEnded(){
-        if (setCounter >=numOfSets ) return true;
+        if (setCounter >= numOfSets ) return true;
 //        if (setCounter >= sets.length) return true;
         return false;
     }

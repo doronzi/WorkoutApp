@@ -1,6 +1,7 @@
 package com.workout.workout;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +44,7 @@ public class new_workout_activity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference();
-        myRef.setValue("Workouts");
+        //myRef.setValue("Workouts");
 
         final TextView workoutNameTxtView = (TextView)findViewById(R.id.workoutName);
         final TextView dateTxtView = (TextView)findViewById(R.id.dateTextView);
@@ -186,9 +187,10 @@ public class new_workout_activity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Exercise ex = exList.get(currentEx);
                 ex.setSet(Integer.parseInt(inputReps.getText().toString()),
-                        Float.parseFloat(inputWeight.getText().toString()),setTime,restTime);
+                        Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
                 ex.increntCounter();
                 exAdapter.notifyDataSetChanged();
+
                 if (ex.isEnded()) {
                     addExButton.setEnabled(true);
                     finishWorkoutButton.setEnabled(true);
@@ -197,7 +199,6 @@ public class new_workout_activity extends AppCompatActivity {
                 else
                     addSetButton.setEnabled(true);
                 endSetButton.setEnabled(false);
-
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -215,6 +216,8 @@ public class new_workout_activity extends AppCompatActivity {
         newWorkout.setExs(exList);
 
         myRef.child("Workouts").child(newWorkout.getId()).setValue(newWorkout);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
 
     }
 }

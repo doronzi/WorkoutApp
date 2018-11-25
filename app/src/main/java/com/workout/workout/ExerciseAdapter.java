@@ -24,7 +24,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
         public MyViewHolder(View view) {
             super(view);
             title = (TextView) view.findViewById(R.id.item_title);
-            exInfo = (TextView) view.findViewById(R.id.exInfo);
             subItem = (LinearLayout) view.findViewById(R.id.sub_item);
 
         }
@@ -33,30 +32,20 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
             boolean expanded = ex.isExpanded();
             // Set the visibility based on state
             subItem.setVisibility(expanded ? View.VISIBLE : View.GONE);
+
             if (ex.getSetCounter() > 0 &&  !ex.getSets().get(ex.getSetCounter() - 1).isInitilized()) {
+                Log.i(TAG, "bind: set Initialize:"+ String.valueOf(ex.getSets().get(ex.getSetCounter() - 1).isInitilized())+
+                        "\nsetCounter: " + String.valueOf(ex.getSetCounter()));
                 TextView tempTV = new TextView (context);
                 tempTV.setText(ex.getSets().get(ex.getSetCounter() - 1).toString());
+                Log.i(TAG, "bind: " + ex.getSets().get(ex.getSetCounter() - 1).toString());
                 ex.getSets().get(ex.getSetCounter() - 1).setInitilized(true);
                 subItem.addView(tempTV);
-
+                subItem.invalidate();
+                Log.i(TAG, "bind: " + String.valueOf(subItem.getChildCount()));
             }
 
             title.setText(ex.getExName());
-            //exInfo.setText(ex.toString());
-//            TextView[] setsTV = new TextView[ex.getSets().length];
-//            Log.i(TAG, "title set " + ex.getExName());
-//            int i = 0;
-//            for (WorkoutSet set : ex.getSets()) {
-//                setsTV[i] = new TextView(context);
-//                if (set!= null) {
-//                    Log.i(TAG, set.toString());
-//                    setsTV[i].setText(set.getReps() + " Reps of " + set.getWeight() + " kgs");
-//                }
-//                else
-//                    setsTV[i].setText("0 Reps of 0 kgs");
-//                subItem.addView(setsTV[i]);
-//                i++;
-//            }
         }
     }
     public ExerciseAdapter(List<Exercise> exercisesList) {

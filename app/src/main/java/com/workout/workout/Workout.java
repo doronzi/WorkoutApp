@@ -19,8 +19,8 @@ public class Workout {
         woName = name;
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         date = dateFormat.format(new Date());
-        DateFormat dateIDFormat = new SimpleDateFormat("ddMMyyyy");
-        id = woName + dateIDFormat.format(new Date());
+        DateFormat dateIDFormat = new SimpleDateFormat("yyyyMMddHHmm");
+        id = dateIDFormat.format(new Date());
     }
 
     public String getWoName() {
@@ -47,5 +47,10 @@ public class Workout {
 
     public void setExs(List<Exercise> exs) {
         this.exs = new ArrayList<Exercise>(exs);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.id.equals(((Workout)obj).getId());
     }
 }
