@@ -31,7 +31,7 @@ public class new_workout_activity extends AppCompatActivity {
     private static final String TAG =  "newWorkout";
     final double NO_REST_BEFORE = 0;
     Workout newWorkout;
-    private List<Exercise> exList = new ArrayList<>();
+//    private List<Exercise> exList = new ArrayList<>();
     private RecyclerView exRecyclerView;
     private ExerciseAdapter exAdapter;
     Button addExButton, addSetButton, endSetButton, finishWorkoutButton;
@@ -39,9 +39,10 @@ public class new_workout_activity extends AppCompatActivity {
     private double restTime = 0;
     int currentEx = 0;
     DatabaseReference myRef;
-    private List<ListView> listViews = new ArrayList<>();
-    private List<SetsAdapter> listAdapters = new ArrayList<>();
+//    private List<ListView> listViews = new ArrayList<>();
+//    private List<SetsAdapter> listAdapters = new ArrayList<>();
     private LinearLayout listViewLayout;
+    WorkoutManager workoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class new_workout_activity extends AppCompatActivity {
         endSetButton = (Button)findViewById(R.id.endSet);
         finishWorkoutButton = (Button)findViewById(R.id.finishWorkout);
         listViewLayout = (LinearLayout)findViewById(R.id.exList);
+        workoutManager = new WorkoutManager(listViewLayout);
 
 
         globalChronmtr.start();
@@ -128,22 +130,27 @@ public class new_workout_activity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Exercise ex = new Exercise(Integer.parseInt(inputNumOfSets.getText().toString()),
-                        inputName.getText().toString());
-                exList.add(ex);
-//                        exAdapter.notifyDataSetChanged();
-                        addSetButton.setEnabled(true);
-                        addExButton.setEnabled(false);
-                        ListView tempListView = new ListView(getBaseContext());
-                        TextView listViewTitleTxt = new TextView(getBaseContext());
-                        listViewTitleTxt.setText(inputName.getText().toString());
-                        listViewTitleTxt.setTextColor(Color.BLACK);
-                        tempListView.addHeaderView(listViewTitleTxt);
-                        SetsAdapter tempAdapter = new SetsAdapter(ex.getSets(),getBaseContext());
-                        tempListView.setAdapter(tempAdapter);
-                        listAdapters.add(tempAdapter);
-                        listViews.add(tempListView);
-                        listViewLayout.addView(tempListView);
+                //Exercise ex = new Exercise(Integer.parseInt(inputNumOfSets.getText().toString()),
+                //        inputName.getText().toString());
+
+                workoutManager.addExercise(Integer.parseInt(inputNumOfSets.getText().toString()),
+                        inputName.getText().toString(), getBaseContext());
+//                exList.add(ex);
+////                        exAdapter.notifyDataSetChanged();
+//
+//                        ListView tempListView = new ListView(getBaseContext());
+//                        TextView listViewTitleTxt = new TextView(getBaseContext());
+//                        listViewTitleTxt.setText(inputName.getText().toString());
+//                        listViewTitleTxt.setTextColor(Color.BLACK);
+//                        tempListView.addHeaderView(listViewTitleTxt);
+//                        SetsAdapter tempAdapter = new SetsAdapter(ex.getSets(),getBaseContext());
+//                        tempListView.setAdapter(tempAdapter);
+//                        listAdapters.add(tempAdapter);
+//                        listViews.add(tempListView);
+//                        listViewLayout.addView(tempListView);
+
+                addSetButton.setEnabled(true);
+                addExButton.setEnabled(false);
 
             }
         });
@@ -205,19 +212,20 @@ public class new_workout_activity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Exercise ex = exList.get(currentEx);
-                ex.setSet(Integer.parseInt(inputReps.getText().toString()),
-                        Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
-                ex.increntCounter();
-                listAdapters.get(currentEx).notifyDataSetChanged();
+                Exercise ex = workoutManager.getExerciseFromPosition(currentEx);
+//                ex.setSet(Integer.parseInt(inputReps.getText().toString()),
+//                        Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
+//                ex.increntCounter();
+//                workoutManager.getAdapterFromPosition(currentEx).notifyDataSetChanged();
 //                exAdapter.notifyDataSetChanged();
 //
+                workoutManager.endSet(currentEx, Integer.parseInt(inputReps.getText().toString()),
+                        Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
                 if (ex.isEnded()) {
                     addExButton.setEnabled(true);
                     finishWorkoutButton.setEnabled(true);
                     currentEx++;
-                }
-                else
+                } else
                     addSetButton.setEnabled(true);
                 endSetButton.setEnabled(false);
             }
@@ -234,7 +242,7 @@ public class new_workout_activity extends AppCompatActivity {
 
 
     public void finishWorkout(View view) {
-        newWorkout.setExs(exList);
+        newWorkout.setExs(workoutManager.getExList());
 
         myRef.child("Workouts").child(newWorkout.getId()).setValue(newWorkout);
         Intent intent = new Intent(this, MainActivity.class);

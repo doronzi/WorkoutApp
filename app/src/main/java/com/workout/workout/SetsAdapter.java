@@ -1,6 +1,7 @@
 package com.workout.workout;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +47,8 @@ public class SetsAdapter extends ArrayAdapter<WorkoutSet> {
 
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
+            Log.d("mylog", "getView: "+ String.valueOf(getContext()));
+            Log.d("mylog", "getView: "+ String.valueOf(mContext));
             convertView = inflater.inflate(R.layout.set_list_item, parent, false);
             viewHolder.txtReps = (TextView) convertView.findViewById(R.id.repsTxt);
             viewHolder.txtWeight = (TextView) convertView.findViewById(R.id.weightTxt);
