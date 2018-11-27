@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView workoutRecyclerView;
     private WorkoutsAdapter workoutsAdapter;
     private final String TAG = "main";
-    private final int WORKOUTS_LIMIT = 2;
+    private final int WORKOUTS_LIMIT = 3;
     private int pos;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +45,16 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Workout w = (ds.getValue(Workout.class));
-                    Log.d(TAG, "oncreate: "+w.getWoName());
                     workouts.add(w);
-                    Log.d(TAG, "onCreate:" + ds.getKey());
-                    Log.i(TAG, "onCreate: " + String.valueOf(workouts));
 
-
-                    Log.i(TAG, "onCreate: " + String.valueOf(workouts));
-
-                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    workoutRecyclerView.setLayoutManager(mLayoutManager);
-                    workoutRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    workoutRecyclerView.setAdapter(workoutsAdapter);
-                    pos = workouts.size() - 1;
-                    Log.i(TAG, "onCreate: pos " + pos);
                 }
+                Collections.reverse(workouts);
+                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                workoutRecyclerView.setLayoutManager(mLayoutManager);
+                workoutRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                workoutRecyclerView.setAdapter(workoutsAdapter);
+                pos = workouts.size() - 1;
+
             }
 
             @Override
@@ -66,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
-        myRef.limitToLast(WORKOUTS_LIMIT).addListenerForSingleValueEvent(valueEventListener);
+        myRef.orderByKey().limitToLast(WORKOUTS_LIMIT).addListenerForSingleValueEvent(valueEventListener);
 
 
 
@@ -85,16 +81,12 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     Workout w = (ds.getValue(Workout.class));
                     Log.d(TAG, "getMore: " + w.getWoName());
-                    if (!workouts.contains(w)) workouts.add(w);
-
-                    Log.d(TAG, "getMore:" + ds.getKey());
-                    Log.i(TAG, "getMore: " + String.valueOf(workouts));
-
-
-                    Log.i(TAG, "getMore: " + String.valueOf(workouts));
-
-                    workoutsAdapter.notifyDataSetChanged();
+                    if (!workouts.contains(w))
+                        workouts.add(w);
                 }
+                workoutsAdapter.notifyDataSetChanged();
+                Collections.sort(workouts);
+                Collections.reverse(workouts);
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -102,8 +94,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
         };
-        Log.i(TAG, "getMoreWorkouts: pos " + pos);
-        myRef.orderByChild("id").limitToLast(WORKOUTS_LIMIT + 1).startAt(workouts.get(pos).getId()).addListenerForSingleValueEvent(valueEventListener);
+
+        String endRetrievingIdPoint = workouts.get(pos).getId();
+        myRef.orderByKey().endAt(endRetrievingIdPoint).limitToFirst(WORKOUTS_LIMIT).addListenerForSingleValueEvent(valueEventListener);
 
         pos = workouts.size() - 1;
     }

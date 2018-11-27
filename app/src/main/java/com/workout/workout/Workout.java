@@ -6,10 +6,11 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class Workout implements Serializable {
+public class Workout implements Serializable,Comparable<Workout> {
     private String woName;
     private List<Exercise> exs;
     private String date;
@@ -60,5 +61,10 @@ public class Workout implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return this.id.equals(((Workout)obj).getId());
+    }
+
+    @Override
+    public int compareTo(Workout o) {
+        return this.getId().compareTo(o.getId());
     }
 }
