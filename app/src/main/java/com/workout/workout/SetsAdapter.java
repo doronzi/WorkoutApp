@@ -1,6 +1,7 @@
 package com.workout.workout;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +35,9 @@ public class SetsAdapter extends ArrayAdapter<WorkoutSet> {
 
 
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         // Get the data item for this position
         WorkoutSet workoutSet = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
@@ -75,4 +77,5 @@ public class SetsAdapter extends ArrayAdapter<WorkoutSet> {
         // Return the completed view to render on screen
         return convertView;
     }
+
 }

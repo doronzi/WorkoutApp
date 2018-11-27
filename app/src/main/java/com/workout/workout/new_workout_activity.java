@@ -2,46 +2,29 @@ package com.workout.workout;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.SystemClock;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
-import android.text.Layout;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Chronometer;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class new_workout_activity extends AppCompatActivity {
-    private static final String TAG =  "newWorkout";
-    final double NO_REST_BEFORE = 0;
     Workout newWorkout;
-//    private List<Exercise> exList = new ArrayList<>();
-    private RecyclerView exRecyclerView;
-    private ExerciseAdapter exAdapter;
     Button addExButton, addSetButton, endSetButton, finishWorkoutButton;
     Chronometer setChronmtr, globalChronmtr, restChronmtr;
     private double restTime = 0;
     int currentEx = 0;
     DatabaseReference myRef;
-//    private List<ListView> listViews = new ArrayList<>();
-//    private List<SetsAdapter> listAdapters = new ArrayList<>();
-    private LinearLayout listViewLayout;
+    LinearLayout listViewLayout;
     WorkoutManager workoutManager;
 
     @Override
@@ -94,14 +77,6 @@ public class new_workout_activity extends AppCompatActivity {
 
         builder.show();
 
-        //exRecyclerView = (RecyclerView) findViewById(R.id.exList);
-//        exAdapter = new ExerciseAdapter(exList);
-//        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-//        exRecyclerView.setLayoutManager(mLayoutManager);
-//        exRecyclerView.setItemAnimator(new DefaultItemAnimator());
-//        exRecyclerView.setAdapter(exAdapter);
-
-
     }
     public void addEx(View view){
         if (finishWorkoutButton.isEnabled())
@@ -130,27 +105,12 @@ public class new_workout_activity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //Exercise ex = new Exercise(Integer.parseInt(inputNumOfSets.getText().toString()),
-                //        inputName.getText().toString());
-
-                workoutManager.addExercise(Integer.parseInt(inputNumOfSets.getText().toString()),
-                        inputName.getText().toString(), getBaseContext());
-//                exList.add(ex);
-////                        exAdapter.notifyDataSetChanged();
-//
-//                        ListView tempListView = new ListView(getBaseContext());
-//                        TextView listViewTitleTxt = new TextView(getBaseContext());
-//                        listViewTitleTxt.setText(inputName.getText().toString());
-//                        listViewTitleTxt.setTextColor(Color.BLACK);
-//                        tempListView.addHeaderView(listViewTitleTxt);
-//                        SetsAdapter tempAdapter = new SetsAdapter(ex.getSets(),getBaseContext());
-//                        tempListView.setAdapter(tempAdapter);
-//                        listAdapters.add(tempAdapter);
-//                        listViews.add(tempListView);
-//                        listViewLayout.addView(tempListView);
 
                 addSetButton.setEnabled(true);
                 addExButton.setEnabled(false);
+
+                workoutManager.addNewExercise(Integer.parseInt(inputNumOfSets.getText().toString()),
+                        inputName.getText().toString(),getBaseContext());
 
             }
         });
@@ -212,16 +172,11 @@ public class new_workout_activity extends AppCompatActivity {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Exercise ex = workoutManager.getExerciseFromPosition(currentEx);
-//                ex.setSet(Integer.parseInt(inputReps.getText().toString()),
-//                        Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
-//                ex.increntCounter();
-//                workoutManager.getAdapterFromPosition(currentEx).notifyDataSetChanged();
-//                exAdapter.notifyDataSetChanged();
-//
+                Exercise ex = workoutManager.getExByPos(currentEx);
+
                 workoutManager.endSet(currentEx, Integer.parseInt(inputReps.getText().toString()),
                         Float.parseFloat(inputWeight.getText().toString()), setTime, restTime);
-                if (ex.isEnded()) {
+                if (ex != null && ex.isEnded()) {
                     addExButton.setEnabled(true);
                     finishWorkoutButton.setEnabled(true);
                     currentEx++;
@@ -248,5 +203,10 @@ public class new_workout_activity extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
+    }
+
+    public void toMainActivity(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

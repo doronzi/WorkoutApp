@@ -1,11 +1,12 @@
 package com.workout.workout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
 A class which representing an Exercise
  */
-public class Exercise {
+public class Exercise implements Serializable {
     private ArrayList<WorkoutSet> sets;
     private String exName;
     private boolean isExpanded;

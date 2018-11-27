@@ -1,6 +1,8 @@
 package com.workout.workout;
 
-public class WorkoutSet {
+import java.io.Serializable;
+
+public class WorkoutSet implements Serializable {
     private int reps;
     private float weight;
     private double rest;

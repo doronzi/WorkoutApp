@@ -2,17 +2,12 @@ package com.workout.workout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +21,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     DatabaseReference myRef;
     List<Workout> workouts;
-    private RecyclerView exRecyclerView;
+    private RecyclerView workoutRecyclerView;
     private WorkoutsAdapter workoutsAdapter;
     private final String TAG = "main";
     private final int WORKOUTS_LIMIT = 2;
@@ -39,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference().child("Workouts");
         workouts = new ArrayList<Workout>();
-        exRecyclerView = (RecyclerView) findViewById(R.id.workoutsRecycler);
+        workoutRecyclerView = (RecyclerView) findViewById(R.id.workoutsRecycler);
         workoutsAdapter = new WorkoutsAdapter(workouts);
+
 
 
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -57,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "onCreate: " + String.valueOf(workouts));
 
                     RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                    exRecyclerView.setLayoutManager(mLayoutManager);
-                    exRecyclerView.setItemAnimator(new DefaultItemAnimator());
-                    exRecyclerView.setAdapter(workoutsAdapter);
+                    workoutRecyclerView.setLayoutManager(mLayoutManager);
+                    workoutRecyclerView.setItemAnimator(new DefaultItemAnimator());
+                    workoutRecyclerView.setAdapter(workoutsAdapter);
                     pos = workouts.size() - 1;
                     Log.i(TAG, "onCreate: pos " + pos);
                 }

@@ -1,12 +1,15 @@
 package com.workout.workout;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Workout {
+public class Workout implements Serializable {
     private String woName;
     private List<Exercise> exs;
     private String date;
@@ -39,7 +42,10 @@ public class Workout {
         Exercise ex = new Exercise(number_of_sets, exName);
         exs.add(ex);
     }
-
+    public Exercise getEx(int pos){
+        if (pos < exs.size()) return exs.get(pos);
+        else return null;
+    }
     public String getId() {
         return id;
     }
@@ -48,7 +54,9 @@ public class Workout {
     public void setExs(List<Exercise> exs) {
         this.exs = new ArrayList<Exercise>(exs);
     }
-
+    public int getNumOfExs(){
+        return exs.size();
+    }
     @Override
     public boolean equals(Object obj) {
         return this.id.equals(((Workout)obj).getId());
